@@ -126,14 +126,16 @@ public abstract class AbstractAmsAdsThingHandler<B extends AmsBridgeHandler, C e
       }
 
       Set<SymbolEntry> symbolEntries = Collections.emptySet();
-      try {
-        SymbolReader reader = symbolReaderFactory.create(connection);
-        symbolEntries = reader.read().join();
-      } catch (Exception e) {
-        updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.HANDLER_INITIALIZING_ERROR, "Could not retrieve data type and symbol information from ADS device " + e.getMessage());
-      }
+      // populate raw symbol table, adjust bug in PLC4X itself
+      SymbolReader reader = symbolReaderFactory.create(connection);
 
       if (getThingConfig().get().discoverChannels) {
+        try {
+          symbolEntries = reader.read().join();
+        } catch (Exception e) {
+          updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.HANDLER_INITIALIZING_ERROR, "Could not retrieve data type and symbol information from ADS device " + e.getMessage());
+        }
+
         try {
           updateChannels(symbolEntries);
         } catch (Exception e) {
