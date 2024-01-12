@@ -134,6 +134,7 @@ public abstract class AbstractAmsAdsThingHandler<B extends AmsBridgeHandler, C e
           symbolEntries = reader.read().join();
         } catch (Exception e) {
           updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.HANDLER_INITIALIZING_ERROR, "Could not retrieve data type and symbol information from ADS device " + e.getMessage());
+          return;
         }
 
         try {
