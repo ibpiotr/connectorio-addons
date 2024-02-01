@@ -63,6 +63,15 @@
         <option value="DOUBLE">LREAL (8)</option>
       </options>
     </parameter>
+
+    <parameter name="refreshInterval" type="integer" required="false">
+      <label>Refresh interval</label>
+      <description>
+        Default refresh interval specified for entire connection and devices associated with it.
+        Setting refresh interval forces this channel to be polled rather than subscribed.
+        It might help with older devices which do not support subscriptions.
+      </description>
+    </parameter>
   </config-description>
 
   <config-description uri="thing-type:co7io-amsads:number-direct-dec-tag">
@@ -109,6 +118,15 @@
         <option value="DOUBLE">LREAL (8)</option>
       </options>
     </parameter>
+
+    <parameter name="refreshInterval" type="integer" required="false">
+      <label>Refresh interval</label>
+      <description>
+        Default refresh interval specified for entire connection and devices associated with it.
+        Setting refresh interval forces this channel to be polled rather than subscribed.
+        It might help with older devices which do not support subscriptions.
+      </description>
+    </parameter>
   </config-description>
 
 
@@ -117,7 +135,7 @@
       <label>Index Group (hex)</label>
       <description>Index group in hex format (excluding 0x prefix). For example F00F.</description>
     </parameter>
-    <parameter name="indexOffset" type="integer">
+    <parameter name="indexOffset" type="text">
       <label>Index Offset (hex)</label>
       <description>Offset in given group in hex format (excluding 0x prefix). For example 01.</description>
     </parameter>
@@ -155,6 +173,15 @@
         <option value="LREAL">LREAL (8)</option>
         <option value="DOUBLE">LREAL (8)</option>
       </options>
+    </parameter>
+
+    <parameter name="refreshInterval" type="integer" required="false">
+      <label>Refresh interval</label>
+      <description>
+        Default refresh interval specified for entire connection and devices associated with it.
+        Setting refresh interval forces this channel to be polled rather than subscribed.
+        It might help with older devices which do not support subscriptions.
+      </description>
     </parameter>
   </config-description>
 

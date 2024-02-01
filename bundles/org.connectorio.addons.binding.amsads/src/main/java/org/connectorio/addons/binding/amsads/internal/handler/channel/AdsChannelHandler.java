@@ -17,7 +17,7 @@
  */
 package org.connectorio.addons.binding.amsads.internal.handler.channel;
 
-import org.apache.plc4x.java.api.messages.PlcSubscriptionRequest.Builder;
+import org.apache.plc4x.java.ads.tag.AdsTag;
 import org.connectorio.addons.binding.amsads.AmsAdsBindingConstants;
 import org.openhab.core.thing.Channel;
 import org.openhab.core.thing.type.ChannelTypeUID;
@@ -49,7 +49,15 @@ public interface AdsChannelHandler {
 
   Channel createChannel();
 
-  void subscribe(Builder subscriptionBuilder, String channelId);
+  AdsTag createTag();
+
+  /**
+   * Returns refresh interval time expressed in milliseconds if channel should be polled rather
+   * than subscribed using ads notifications.
+   *
+   * @return
+   */
+  Long getRefreshInterval();
 
   void onChange(Object value);
 }

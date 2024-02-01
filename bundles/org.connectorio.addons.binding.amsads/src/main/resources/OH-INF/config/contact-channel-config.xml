@@ -37,16 +37,25 @@
       </description>
       <options>
         <option value="BOOL">BOOL (1)</option>
-        <option value="BIT">BOOL (1)</option>
-        <option value="BIT8">BYTE (1)</option>
+        <option value="BIT">BIT (1)</option>
+        <option value="BIT8">BIT8 (1)</option>
         <option value="BYTE">BYTE (1)</option>
-        <option value="BITARR8">BYTE (1)</option>
+        <option value="BITARR8">BITARR8 (1)</option>
       </options>
     </parameter>
     <parameter name="inverse" type="boolean">
       <label>Inverse conversion logic</label>
       <description>Inverse logical representation of FALSE/TRUE values.</description>
       <default>false</default>
+    </parameter>
+
+    <parameter name="refreshInterval" type="integer" required="false">
+      <label>Refresh interval</label>
+      <description>
+        Default refresh interval specified for entire connection and devices associated with it.
+        Setting refresh interval forces this channel to be polled rather than subscribed.
+        It might help with older devices which do not support subscriptions.
+      </description>
     </parameter>
   </config-description>
 
@@ -68,16 +77,25 @@
       </description>
       <options>
         <option value="BOOL">BOOL (1)</option>
-        <option value="BIT">BOOL (1)</option>
-        <option value="BIT8">BYTE (1)</option>
+        <option value="BIT">BIT (1)</option>
+        <option value="BIT8">BIT8 (1)</option>
         <option value="BYTE">BYTE (1)</option>
-        <option value="BITARR8">BYTE (1)</option>
+        <option value="BITARR8">BITARR8 (1)</option>
       </options>
     </parameter>
     <parameter name="inverse" type="boolean">
       <label>Inverse conversion logic</label>
       <description>Inverse logical representation of FALSE/TRUE values.</description>
       <default>false</default>
+    </parameter>
+
+    <parameter name="refreshInterval" type="integer" required="false">
+      <label>Refresh interval</label>
+      <description>
+        Default refresh interval specified for entire connection and devices associated with it.
+        Setting refresh interval forces this channel to be polled rather than subscribed.
+        It might help with older devices which do not support subscriptions.
+      </description>
     </parameter>
   </config-description>
 
@@ -86,7 +104,7 @@
       <label>Index Group (hex)</label>
       <description>Index group in hex format (excluding 0x prefix). For example F00F.</description>
     </parameter>
-    <parameter name="indexOffset" type="integer">
+    <parameter name="indexOffset" type="text">
       <label>Index Offset (hex)</label>
       <description>Offset in given group in hex format (excluding 0x prefix). For example 01.</description>
     </parameter>
@@ -99,16 +117,25 @@
       </description>
       <options>
         <option value="BOOL">BOOL (1)</option>
-        <option value="BIT">BOOL (1)</option>
-        <option value="BIT8">BYTE (1)</option>
+        <option value="BIT">BIT (1)</option>
+        <option value="BIT8">BIT8 (1)</option>
         <option value="BYTE">BYTE (1)</option>
-        <option value="BITARR8">BYTE (1)</option>
+        <option value="BITARR8">BITARR8 (1)</option>
       </options>
     </parameter>
     <parameter name="inverse" type="boolean">
       <label>Inverse conversion logic</label>
       <description>Inverse logical representation of FALSE/TRUE values.</description>
       <default>false</default>
+    </parameter>
+
+    <parameter name="refreshInterval" type="integer" required="false">
+      <label>Refresh interval</label>
+      <description>
+        Default refresh interval specified for entire connection and devices associated with it.
+        Setting refresh interval forces this channel to be polled rather than subscribed.
+        It might help with older devices which do not support subscriptions.
+      </description>
     </parameter>
   </config-description>
 

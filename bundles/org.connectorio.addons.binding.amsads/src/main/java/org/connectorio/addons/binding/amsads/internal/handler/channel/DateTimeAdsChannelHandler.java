@@ -17,11 +17,8 @@
  */
 package org.connectorio.addons.binding.amsads.internal.handler.channel;
 
-import java.time.Duration;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.ZoneId;
 import java.util.Map;
+import org.apache.plc4x.java.ads.tag.AdsTag;
 import org.apache.plc4x.java.api.messages.PlcSubscriptionRequest.Builder;
 import org.connectorio.addons.binding.amsads.internal.config.channel.DirectDecimalFieldConfiguration;
 import org.connectorio.addons.binding.amsads.internal.config.channel.DirectHexFieldConfiguration;
@@ -29,7 +26,6 @@ import org.connectorio.addons.binding.amsads.internal.config.channel.SymbolField
 import org.connectorio.addons.binding.amsads.internal.symbol.SymbolEntry;
 import org.openhab.core.config.core.Configuration;
 import org.openhab.core.library.CoreItemFactory;
-import org.openhab.core.library.types.DateTimeType;
 import org.openhab.core.thing.Channel;
 import org.openhab.core.thing.ChannelUID;
 import org.openhab.core.thing.Thing;
@@ -73,17 +69,18 @@ public class DateTimeAdsChannelHandler extends AdsChannelHandlerBase implements 
   }
 
   @Override
-  public void subscribe(Builder subscriptionBuilder, String channelId) {
+  public AdsTag createTag() {
     if (DATETIME_DIRECT_HEX.equals(channel.getChannelTypeUID())) {
       DirectDecimalFieldConfiguration configuration = channel.getConfiguration().as(DirectDecimalFieldConfiguration.class);
-      subscribe(subscriptionBuilder, createTag(configuration, configuration), channelId);
+      return createTag(configuration, configuration);
     } else if (DATETIME_DIRECT_HEX.equals(channel.getChannelTypeUID())) {
       DirectHexFieldConfiguration configuration = channel.getConfiguration().as(DirectHexFieldConfiguration.class);
-      subscribe(subscriptionBuilder, createTag(configuration, configuration), channelId);
+      return createTag(configuration, configuration);
     } else if (DATETIME_SYMBOL.equals(channel.getChannelTypeUID())) {
       SymbolFieldConfiguration configuration = channel.getConfiguration().as(SymbolFieldConfiguration.class);
-      subscribe(subscriptionBuilder, createTag(configuration, configuration), channelId);
+      return createTag(configuration, configuration);
     }
+    return null;
   }
 
   @Override

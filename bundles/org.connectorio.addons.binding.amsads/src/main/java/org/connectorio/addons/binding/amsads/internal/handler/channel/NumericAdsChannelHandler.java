@@ -19,6 +19,7 @@ package org.connectorio.addons.binding.amsads.internal.handler.channel;
 
 import java.math.BigDecimal;
 import java.util.Map;
+import org.apache.plc4x.java.ads.tag.AdsTag;
 import org.apache.plc4x.java.api.messages.PlcSubscriptionRequest.Builder;
 import org.connectorio.addons.binding.amsads.internal.config.channel.binary.BinaryDirectDecimalFieldConfiguration;
 import org.connectorio.addons.binding.amsads.internal.config.channel.binary.BinaryDirectHexFieldConfiguration;
@@ -68,17 +69,18 @@ public class NumericAdsChannelHandler extends AdsChannelHandlerBase implements A
   }
 
   @Override
-  public void subscribe(Builder subscriptionBuilder, String channelId) {
+  public AdsTag createTag() {
     if (NUMBER_DIRECT_DEC.equals(channel.getChannelTypeUID())) {
       BinaryDirectDecimalFieldConfiguration configuration = channel.getConfiguration().as(BinaryDirectDecimalFieldConfiguration.class);
-      subscribe(subscriptionBuilder, createTag(configuration, configuration), channelId);
+      return createTag(configuration, configuration);
     } else if (NUMBER_DIRECT_HEX.equals(channel.getChannelTypeUID())) {
       BinaryDirectHexFieldConfiguration configuration = channel.getConfiguration().as(BinaryDirectHexFieldConfiguration.class);
-      subscribe(subscriptionBuilder, createTag(configuration, configuration), channelId);
+      return createTag(configuration, configuration);
     } else if (NUMBER_SYMBOL.equals(channel.getChannelTypeUID())) {
       BinarySymbolicFieldConfiguration configuration = channel.getConfiguration().as(BinarySymbolicFieldConfiguration.class);
-      subscribe(subscriptionBuilder, createTag(configuration, configuration), channelId);
+      return createTag(configuration, configuration);
     }
+    return null;
   }
 
   @Override

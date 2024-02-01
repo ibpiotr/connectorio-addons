@@ -73,19 +73,18 @@ public class TextAdsChannelHandler extends AdsChannelHandlerBase implements AdsC
   }
 
   @Override
-  public void subscribe(Builder subscriptionBuilder, String channelId) {
-    /*
+  public AdsTag createTag() {
     if (TEXT_DIRECT_HEX.equals(channel.getChannelTypeUID())) {
       DirectDecimalFieldConfiguration configuration = channel.getConfiguration().as(DirectDecimalFieldConfiguration.class);
-      subscribe(subscriptionBuilder, createTag(configuration, configuration), channelId);
+      return createTag(configuration, configuration);
     } else if (TEXT_DIRECT_HEX.equals(channel.getChannelTypeUID())) {
       DirectHexFieldConfiguration configuration = channel.getConfiguration().as(DirectHexFieldConfiguration.class);
-      subscribe(subscriptionBuilder, createTag(configuration, configuration), channelId);
+      return createTag(configuration, configuration);
     } else if (TEXT_SYMBOL.equals(channel.getChannelTypeUID())) {
       SymbolFieldConfiguration configuration = channel.getConfiguration().as(SymbolFieldConfiguration.class);
-      subscribe(subscriptionBuilder, createTag(configuration, configuration), channelId);
+      return createTag(configuration, configuration);
     }
-    */
+    return null;
   }
 
   @Override
@@ -96,15 +95,6 @@ public class TextAdsChannelHandler extends AdsChannelHandlerBase implements AdsC
   @Override
   protected AdsTag createTag(TypedChannelConfiguration typeCfg, SymbolicFieldConfiguration address) {
     return null;
-  }
-
-  @Override
-  protected void subscribe(Builder subscriptionBuilder, AdsTag tag, String channelId) {
-    if (tag == null) {
-      logger.warn("Unsupported text channel {} / {}", channelId, tag);
-      return;
-    }
-    subscriptionBuilder.addCyclicTag(channelId, tag, Duration.ofMillis(5000L));
   }
 
   @Override
