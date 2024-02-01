@@ -22,10 +22,10 @@ public class DirectHexFieldConfiguration extends TypedChannelConfiguration imple
   public String indexOffset;
 
   public long getIndexGroup() {
-    return Long.parseLong(indexGroup, 16);
+    return indexGroup.startsWith("0x") ? Long.parseLong(indexGroup.substring(2), 16) : Long.parseLong(indexGroup, 16);
   }
 
   public long getIndexOffset() {
-    return Long.parseLong(indexOffset, 16);
+    return indexOffset.startsWith("0x") ? Long.parseLong(indexOffset.substring(2), 16) : Long.parseLong(indexOffset, 16);
   }
 }

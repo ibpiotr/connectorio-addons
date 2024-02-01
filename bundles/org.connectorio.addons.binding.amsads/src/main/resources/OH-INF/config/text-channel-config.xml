@@ -56,11 +56,11 @@
   <config-description uri="thing-type:co7io-amsads:text-direct-dec-tag">
     <parameter name="indexGroup" type="integer">
       <label>Index Group (decimal)</label>
-      <description>Index group in decimal format (excluding 0x prefix). For example F00F.</description>
+      <description>Index group in decimal format (with or without 0x prefix). For example F00F, 0xF00F.</description>
     </parameter>
     <parameter name="indexOffset" type="integer">
       <label>Index Offset (decimal)</label>
-      <description>Offset in given decimal in hex format (excluding 0x prefix). For example 01.</description>
+      <description>Offset in given decimal in hex format (with or without 0x prefix). For example 01, 0x01.</description>
     </parameter>
     <parameter name="type" type="text">
       <label>Value encoding</label>
@@ -90,11 +90,11 @@
   <config-description uri="thing-type:co7io-amsads:text-direct-hex-tag">
     <parameter name="indexGroup" type="text">
       <label>Index Group (hex)</label>
-      <description>Index group in hex format (excluding 0x prefix). For example F00F.</description>
+      <description>Index group in hex format (with or without 0x prefix). For example F00F, 0xF00F.</description>
     </parameter>
     <parameter name="indexOffset" type="integer">
       <label>Index Offset (hex)</label>
-      <description>Offset in given group in hex format (excluding 0x prefix). For example 01.</description>
+      <description>Offset in given group in hex format (). For example 01.</description>
     </parameter>
     <parameter name="type" type="text">
       <label>Value encoding</label>
