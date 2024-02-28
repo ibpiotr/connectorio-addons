@@ -19,9 +19,12 @@ package org.connectorio.addons.binding.amsads.internal.handler.channel;
 
 import java.util.Map;
 import org.apache.plc4x.java.ads.tag.AdsTag;
-import org.apache.plc4x.java.api.messages.PlcSubscriptionRequest.Builder;
+import org.apache.plc4x.java.api.messages.PlcWriteRequest.Builder;
+import org.apache.plc4x.java.api.value.PlcValue;
+import org.apache.plc4x.java.spi.values.PlcBOOL;
 import org.connectorio.addons.binding.amsads.internal.config.channel.binary.BinaryDirectDecimalFieldConfiguration;
 import org.connectorio.addons.binding.amsads.internal.config.channel.binary.BinaryDirectHexFieldConfiguration;
+import org.connectorio.addons.binding.amsads.internal.config.channel.binary.BinaryFieldConfiguration;
 import org.connectorio.addons.binding.amsads.internal.config.channel.binary.BinarySymbolicFieldConfiguration;
 import org.connectorio.addons.binding.amsads.internal.symbol.SymbolEntry;
 import org.openhab.core.config.core.Configuration;
@@ -33,6 +36,7 @@ import org.openhab.core.thing.ChannelUID;
 import org.openhab.core.thing.Thing;
 import org.openhab.core.thing.binding.ThingHandlerCallback;
 import org.openhab.core.thing.binding.builder.ChannelBuilder;
+import org.openhab.core.types.Command;
 
 public class BinaryAdsChannelHandler extends AdsChannelHandlerBase implements AdsChannelHandler {
 
@@ -66,6 +70,20 @@ public class BinaryAdsChannelHandler extends AdsChannelHandlerBase implements Ad
         "type", symbol.getType().name()
       )))
       .build();
+  }
+
+  @Override
+  public PlcValue update(Command command) {
+    BinaryFieldConfiguration config = channel.getConfiguration().as(BinaryFieldConfiguration.class);
+    if (command instanceof OnOffType) {
+      boolean on = OnOffType.ON == command;
+      return new PlcBOOL(config.isInverse() ? !on : on);
+    }
+    if (command instanceof OpenClosedType) {
+      boolean open = OpenClosedType.OPEN == command;
+      return new PlcBOOL(config.isInverse() ? !open : open);
+    }
+    return null;
   }
 
   @Override

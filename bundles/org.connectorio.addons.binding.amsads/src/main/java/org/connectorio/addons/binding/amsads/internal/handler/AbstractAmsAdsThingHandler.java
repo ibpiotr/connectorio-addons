@@ -17,45 +17,38 @@
  */
 package org.connectorio.addons.binding.amsads.internal.handler;
 
-import java.math.BigDecimal;
+import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.Consumer;
 import org.apache.plc4x.java.ads.tag.AdsTag;
 import org.apache.plc4x.java.api.PlcConnection;
-import org.apache.plc4x.java.api.messages.PlcSubscriptionEvent;
-import org.apache.plc4x.java.api.messages.PlcSubscriptionRequest;
-import org.apache.plc4x.java.api.messages.PlcSubscriptionResponse;
-import org.apache.plc4x.java.api.messages.PlcUnsubscriptionRequest;
 import org.apache.plc4x.java.api.messages.PlcWriteRequest;
-import org.apache.plc4x.java.api.model.PlcSubscriptionHandle;
-import org.connectorio.addons.binding.amsads.internal.config.AmsConfiguration;
+import org.apache.plc4x.java.api.types.PlcResponseCode;
+import org.apache.plc4x.java.api.value.PlcValue;
 import org.connectorio.addons.binding.amsads.internal.config.AdsConfiguration;
+import org.connectorio.addons.binding.amsads.internal.config.AmsConfiguration;
 import org.connectorio.addons.binding.amsads.internal.handler.channel.AdsChannelHandler;
 import org.connectorio.addons.binding.amsads.internal.handler.channel.ChannelHandlerFactory;
-import org.connectorio.addons.binding.amsads.internal.handler.polling.PollFetchContainer;
 import org.connectorio.addons.binding.amsads.internal.handler.polling.FetchContainer;
+import org.connectorio.addons.binding.amsads.internal.handler.polling.PollFetchContainer;
 import org.connectorio.addons.binding.amsads.internal.handler.polling.SubscribeFetchContainer;
 import org.connectorio.addons.binding.amsads.internal.symbol.SymbolEntry;
 import org.connectorio.addons.binding.amsads.internal.symbol.SymbolReader;
 import org.connectorio.addons.binding.amsads.internal.symbol.SymbolReaderFactory;
 import org.connectorio.addons.binding.handler.GenericThingHandlerBase;
-import org.openhab.core.library.types.DecimalType;
-import org.openhab.core.library.types.OnOffType;
 import org.openhab.core.thing.Channel;
 import org.openhab.core.thing.ChannelUID;
 import org.openhab.core.thing.Thing;
 import org.openhab.core.thing.ThingStatus;
 import org.openhab.core.thing.ThingStatusDetail;
 import org.openhab.core.types.Command;
-import org.openhab.core.types.State;
-import org.openhab.core.types.UnDefType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -70,7 +63,7 @@ public abstract class AbstractAmsAdsThingHandler<B extends AmsBridgeHandler, C e
   private final SymbolReaderFactory symbolReaderFactory;
   private final ChannelHandlerFactory channelHandlerFactory;
 
-  private final Map<String, AdsChannelHandler> handlerMap = new ConcurrentHashMap<>();
+  private final Map<String, Entry<AdsTag, AdsChannelHandler>> handlerMap = new ConcurrentHashMap<>();
   private final CompletableFuture<PlcConnection> initializer = new CompletableFuture<>();;
 
   private FetchContainer subscriber;
@@ -84,16 +77,35 @@ public abstract class AbstractAmsAdsThingHandler<B extends AmsBridgeHandler, C e
 
   @Override
   public void handleCommand(ChannelUID channelUID, Command command) {
-    AdsChannelHandler channelHandler = handlerMap.get(channelUID.getAsString());
-    if (channelHandler == null) {
+    String channelId = channelUID.getAsString();
+    Entry<AdsTag, AdsChannelHandler> handlerEntry = handlerMap.get(channelId);
+    if (handlerEntry == null) {
       logger.warn("Could not handle command '{}', unsupported channel {}", command, channelUID);
       return;
     }
 
+    PlcValue value = handlerEntry.getValue().update(command);
+    if (value == null) {
+      logger.warn("Skip write channel {} write attempt with command {}, can not determine write value", channelId, command);
+      return;
+    }
+
     getPlcConnection().thenCompose(connection -> {
+      logger.trace("Attempting to send channel {} command {}", channelId, command);
       PlcWriteRequest.Builder builder = connection.writeRequestBuilder();
-      //channelHandler.update(builder, channelUID.getAsString(), command);
-      return builder.build().execute();
+      builder.addTag(channelId, handlerEntry.getKey(), value);
+      return builder.build().execute().whenComplete((r, e) -> {
+        if (e != null) {
+          logger.warn("Failure while writing channel {} command {} to device.", channelId, command, e);
+          return;
+        }
+        PlcResponseCode responseCode = r.getResponseCode(channelId);
+        if (responseCode != PlcResponseCode.OK) {
+          logger.warn("Error '{}' reported for channel {} write attempt with command {}", responseCode, channelId, command);
+          return;
+        }
+        logger.debug("Successful write for channel {} with command {}", channelId, command);
+      });
     });
   }
 
@@ -164,6 +176,8 @@ public abstract class AbstractAmsAdsThingHandler<B extends AmsBridgeHandler, C e
           } else {
             subscriber.add(null, channelId, tag, handler::onChange);
           }
+          // register handler so we can dispatch commands
+          handlerMap.put(channelId, new SimpleEntry<>(tag, handler));
         }
       }
 

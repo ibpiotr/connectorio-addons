@@ -20,6 +20,7 @@ package org.connectorio.addons.binding.amsads.internal.handler.channel;
 import java.util.Map;
 import org.apache.plc4x.java.ads.tag.AdsTag;
 import org.apache.plc4x.java.api.messages.PlcSubscriptionRequest.Builder;
+import org.apache.plc4x.java.api.value.PlcValue;
 import org.connectorio.addons.binding.amsads.internal.config.channel.DirectDecimalFieldConfiguration;
 import org.connectorio.addons.binding.amsads.internal.config.channel.DirectHexFieldConfiguration;
 import org.connectorio.addons.binding.amsads.internal.config.channel.SymbolFieldConfiguration;
@@ -31,6 +32,7 @@ import org.openhab.core.thing.ChannelUID;
 import org.openhab.core.thing.Thing;
 import org.openhab.core.thing.binding.ThingHandlerCallback;
 import org.openhab.core.thing.binding.builder.ChannelBuilder;
+import org.openhab.core.types.Command;
 
 public class DateTimeAdsChannelHandler extends AdsChannelHandlerBase implements AdsChannelHandler {
 
@@ -94,4 +96,8 @@ public class DateTimeAdsChannelHandler extends AdsChannelHandlerBase implements 
 //    }
   }
 
+  @Override
+  public PlcValue update(Command command) {
+    return null;
+  }
 }

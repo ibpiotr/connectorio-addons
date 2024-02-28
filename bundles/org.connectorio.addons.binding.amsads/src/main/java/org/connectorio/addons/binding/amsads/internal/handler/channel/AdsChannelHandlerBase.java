@@ -25,6 +25,7 @@ import org.apache.plc4x.java.ads.tag.DirectAdsTag;
 import org.apache.plc4x.java.ads.tag.SymbolicAdsTag;
 import org.apache.plc4x.java.api.messages.PlcReadRequest;
 import org.apache.plc4x.java.api.messages.PlcSubscriptionRequest;
+import org.apache.plc4x.java.api.messages.PlcWriteRequest.Builder;
 import org.apache.plc4x.java.api.types.PlcValueType;
 import org.connectorio.addons.binding.amsads.internal.config.channel.DirectFieldConfiguration;
 import org.connectorio.addons.binding.amsads.internal.config.channel.SymbolicFieldConfiguration;
@@ -32,6 +33,7 @@ import org.connectorio.addons.binding.amsads.internal.config.channel.TypedChanne
 import org.openhab.core.thing.Channel;
 import org.openhab.core.thing.Thing;
 import org.openhab.core.thing.binding.ThingHandlerCallback;
+import org.openhab.core.types.Command;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
